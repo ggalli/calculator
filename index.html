@@ -8,6 +8,8 @@
 <body>
   <div class="calculator">
     <div class="display"></div>
+    <!-- <p class="calc"></p> -->
+    <!-- <p class="value"></p> -->
     <div class="keys">
       <button data-action="clear">C</button>
       <button data-action="percent">%</button>
@@ -20,15 +22,102 @@
       <button>4</button>
       <button>5</button>
       <button>6</button>
-      <button data-action="add">+</button>
+      <button data-action="sum">+</button>
       <button>1</button>
       <button>2</button>
       <button>3</button>
       <button data-action="result">=</button>
       <button>0</button>
       <button>,</button>
-      <button data-action="delete"><-</button>
+      <button data-action="remove"><-</button>
     </div>
   </div>
+
+  <script>
+    let display = document.querySelector('.display');
+    const buttons = document.querySelectorAll('button');
+
+    const operators = ['+', '-', '×', '÷']
+
+    buttons.forEach(button => button.addEventListener('click', handleButtonClick))
+
+    function handleButtonClick(event) {
+      const action = event.target.dataset.action
+      const value = event.target.textContent
+
+      const isDecimal = display.textContent.includes(',')
+
+      switch (action) {
+          case 'sum':
+            sum();
+            break;
+          case 'subtract':
+            subtract();
+            break;
+          case 'divide':
+            divide();
+            break;
+          case 'multiply':
+            multiply();
+            break;
+          case 'result':
+            result();
+            break;
+          case 'clear':
+            clear();
+            break;
+          case 'percent':
+            percent();
+            break;
+          case 'remove':
+            remove();
+            break;
+        
+          default:
+            if(isDecimal && value === ',') return
+            display.textContent += value
+            break;
+        }
+        
+    }
+
+    function sum() {
+      if (operators.includes(display.textContent.slice(-1))) return
+      display.textContent += "+"
+    }
+
+    function subtract() {
+      if (operators.includes(display.textContent.slice(-1))) return
+      display.textContent += "-"
+    }
+    
+    function divide() {
+      if (operators.includes(display.textContent.slice(-1))) return
+      display.textContent += "÷"
+    }
+    
+    function multiply() {
+      if (operators.includes(display.textContent.slice(-1))) return
+      display.textContent += "×"
+    }
+    
+    function clear() {
+      display.textContent = ""
+    }
+    
+    function remove() {
+      display.textContent = display.textContent.slice(0, -1)
+    }
+    function percent() {}
+    
+    function result() {
+      const calc = display.textContent.replace('×', '*').replace('÷', '/').replace(',', '.')
+
+      const result = String(eval(calc))
+
+      display.textContent = result.replace('.', ',')
+    }
+
+  </script>
 </body>
 </html>
