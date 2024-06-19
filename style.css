@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif
 }
 
 body {
@@ -23,10 +24,28 @@ body {
 }
 
 .display {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   height: 200px;
+  padding: 16px;
   background: #EEF0F4;
   border-radius: 10px;
   box-shadow: inset 6.31px 6.31px 16px #E3E5E9, inset -6.31px -6.31px 16px #F9FBFF;
+  font-size: 2.5rem;
+  text-align: right;
+  color: #444;
+}
+
+.display > p {
+  width: 100%;
+  font-size: 1.5rem;
+  color: #444;
+  text-align: right;
+}
+
+p.value {
+  font-size: 2.5rem;
 }
 
 .keys {
