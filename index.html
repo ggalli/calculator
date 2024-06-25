@@ -34,18 +34,29 @@
   </div>
 
   <script>
-    let display = document.querySelector('.display');
+    const operators = ['+', '-', '×', '÷']
+    let number = ''
+    let resultValue = ''
+
+    const display = document.querySelector('.display');
     const buttons = document.querySelectorAll('button');
 
-    const operators = ['+', '-', '×', '÷']
-
     buttons.forEach(button => button.addEventListener('click', handleButtonClick))
+    document.addEventListener('keydown', handleKeypress)
 
     function handleButtonClick(event) {
       const action = event.target.dataset.action
       const value = event.target.textContent
+      const isDecimal = number.includes(',')
 
-      const isDecimal = display.textContent.includes(',')
+      if(resultValue) {
+        resultValue = ''
+        display.textContent = ''
+      }
+
+      if (operators.includes(value)) {
+        number = ''
+      }
 
       switch (action) {
           case 'sum':
@@ -75,49 +86,105 @@
         
           default:
             if(isDecimal && value === ',') return
+
+            number += value
             display.textContent += value
             break;
         }
         
     }
 
+    function handleKeypress(event) {
+      const key = event.key
+      const code = event.code
+      const isDecimal = display.textContent.includes(',')
+
+      if(resultValue) {
+        resultValue = ''
+        display.textContent = ''
+      }
+
+      switch (key) {
+          case '+':
+            sum();
+            break;
+          case '-':
+            subtract();
+            break;
+          case '/':
+            divide();
+            break;
+          case '*':
+            multiply();
+            break;
+          case 'Enter':
+            result();
+            break;
+          case 'Delete':
+            clear();
+            break;
+          case '%':
+            percent();
+            break;
+          case 'Backspace':
+            remove();
+            break;
+        
+          default:
+            if (!code.includes('Digit') && key !== ',') return
+            
+            if (isDecimal && key === ',') return
+
+            display.textContent += key
+            break;
+        }
+    }
+
     function sum() {
-      if (operators.includes(display.textContent.slice(-1))) return
+      if (display.textContent === '' || operators.includes(display.textContent.slice(-1))) return
       display.textContent += "+"
     }
 
     function subtract() {
-      if (operators.includes(display.textContent.slice(-1))) return
+      if (display.textContent === '' || operators.includes(display.textContent.slice(-1))) return
       display.textContent += "-"
     }
     
     function divide() {
-      if (operators.includes(display.textContent.slice(-1))) return
+      if (display.textContent === '' || operators.includes(display.textContent.slice(-1))) return
       display.textContent += "÷"
     }
     
     function multiply() {
-      if (operators.includes(display.textContent.slice(-1))) return
+      if (display.textContent === '' || operators.includes(display.textContent.slice(-1))) return
       display.textContent += "×"
     }
+
+    function percent() {}
     
     function clear() {
+      number = ''
+      resultValue = ''
       display.textContent = ""
     }
     
     function remove() {
       display.textContent = display.textContent.slice(0, -1)
     }
-    function percent() {}
     
     function result() {
-      const calc = display.textContent.replace('×', '*').replace('÷', '/').replace(',', '.')
+      if(!operators.some(item => display.textContent.includes(item))) return
+
+      number = ''
+
+      const calc = display.textContent.replaceAll('×', '*').replaceAll('÷', '/').replaceAll(',', '.')
 
       const result = String(eval(calc))
 
       display.textContent = result.replace('.', ',')
-    }
 
+      resultValue = result
+    }
   </script>
 </body>
 </html>
