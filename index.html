@@ -29,7 +29,7 @@
       <button data-action="result">=</button>
       <button>0</button>
       <button>,</button>
-      <button data-action="remove"><-</button>
+      <button data-action="remove"><</button>
     </div>
   </div>
 
@@ -97,11 +97,15 @@
     function handleKeypress(event) {
       const key = event.key
       const code = event.code
-      const isDecimal = display.textContent.includes(',')
+      const isDecimal = number.includes(',')
 
       if(resultValue) {
         resultValue = ''
         display.textContent = ''
+      }
+
+      if (operators.includes(key)) {
+        number = ''
       }
 
       switch (key) {
@@ -131,10 +135,9 @@
             break;
         
           default:
-            if (!code.includes('Digit') && key !== ',') return
+            if ((!code.includes('Digit') && key !== ',') || (isDecimal && key === ',')) return
             
-            if (isDecimal && key === ',') return
-
+            number += key
             display.textContent += key
             break;
         }
